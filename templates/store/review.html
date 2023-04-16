@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% include "includes/header.html" %}
+
+{% block content %}
+    {% if user_buy %}
+        <section class="section-content padding-y">
+
+<!-- ============================ COMPONENT REGISTER   ================================= -->
+	<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+      <article class="card-body">
+		<header class="mb-4"><h4 class="card-title">Review</h4></header>
+		<form action="{% url 'send_review' slug=product.slug %}" method="POST" class="form_class">
+            {% csrf_token %}
+            <label>Subject</label>
+            <br>
+            <input name="subject" class="form-control">
+            <br>
+            <label>Review</label>
+            <textarea name="review" class="form-control"></textarea>
+            <br>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block"> Send Review  </button>
+            </div> <!-- form-group// -->
+			</form>
+		</article><!-- card-body.// -->
+    </div> <!-- card .// -->
+    <p class="text-center mt-4">Have an account? <a href="{% url 'product-detail' slug=product.slug %}">go back to product detial</a></p>
+    <br><br>
+<!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+</section>
+    {% else %}
+<!DOCTYPE html>
+<html>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<head>
+	<title>
+		How to define a dialog
+		box or window?
+	</title>
+
+	<style>
+		dialog {
+			color: #1a56e9;
+			font-size: 30px;
+			font-weight: bold;
+			font-style: italic;
+		}
+
+		body {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>
+		<dialog> tag
+	</h1>
+	<dialog open>
+		You should Buy this product then you can Send Review
+	</dialog>
+</body>
+
+</html>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+    {% endif %}
+{% endblock %}
+
+{% include "includes/footer.html" %}
+

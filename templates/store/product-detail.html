@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+<div class="card">
+	<div class="row no-gutters">
+		<aside class="col-md-6">
+<article class="gallery-wrap">
+	<div class="img-big-wrap mainImage">
+	   <center><img src="{{ product.image.url }}"></center>
+	</div> <!-- img-big-wrap.// -->
+
+    <ul class="thumbs" style="margin: 0 auto; padding: 0; float: left">
+        <li style="list-style: none; margin: 10px">
+        <a href="{{ product.image.url }}" target="mainImage"><img src="{{ product.image.url }}" style="width: 80px; width: 80px; border: 1px solid lightgray" alt="Product Image"></a>
+            {% for item in product.product_gallery %}
+                <a href="{{ item.image_produtc.url }}" target="mainImage"><img src="{{ item.image_produtc.url }}" style="width: 80px; width: 80px; border: 1px solid lightgray" alt="Product Image"></a>
+            {% endfor %}
+        </li>
+    </ul>
+
+</article> <!-- gallery-wrap .end// -->
+		</aside>
+		<main class="col-md-6 border-left">
+
+            <form action="{% url 'AddCartItem' product_id=product.id %}" method="POST">
+                {% csrf_token %}
+                <article class="content-body">
+
+                <h2 class="title">{{product.name}}</h2>
+
+                <div class="mb-3">
+                    <var class="price h4">$ {{ product.price }}</var>
+                </div>
+
+                <p>{{ product.description }}</p>
+
+                <hr>
+                    <div class="row">
+                        <div class="item-option-select">
+                            <select name="color" class="form-control">
+                                <option value="" disabled selected>Choose Color</option>
+                                {% for i in product.variation_set.colors %}
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div> <!-- row.// -->
+                    <div class="row">
+                        <div class="item-option-select">
+                            <select name="size" class="form-control">
+                                <option value="" disabled selected>Choose Size</option>
+                                {% for i in product.variation_set.sizes %}
+                                    <option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div> <!-- row.// -->
+                    <hr>
+                    {% if product.stock == 0 %}
+                        <h2 style="color: blue">There is no remaining</h2>
+                    {% else %}
+                        {% if request.user.is_authenticated %}
+                            <button href="{% url 'ShowCart' %}" type="submit" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+                        {% else %}
+                            <h4 style="color: blue">for add to cart you should Login first</h4>
+                        {% endif %}
+                    {% endif %}
+                </article> <!-- product-info-aside .// -->
+            </form>
+		</main> <!-- col.// -->
+	</div> <!-- row.// -->
+</div> <!-- card.// -->
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+<br>
+
+<div class="row">
+			<div class="col-md-9">
+
+	<header class="section-heading">
+		<h3>Customer Reviews </h3>
+	</header>
+    {% if user.is_authenticated %}
+        <h3> <a href="{% url 'send_review' slug=product.slug %}">Create Review</a></h3>
+    {% else %}
+        <h3>for send review you should <a href="{% url 'login' %}">Login First</a></h3>
+    {% endif %}
+    <br>
+    {% for item in product.review_product %}
+    	<article class="box mb-3">
+		<div class="icontext w-100">
+			<div class="text">
+				<span class="date text-muted float-md-right">24.04.2020 </span>
+				<h6 class="mb-1">{{ item.user.username}}</h6>
+			</div>
+		</div> <!-- icontext.// -->
+		<div class="mt-3">
+			<p>
+                {{ item.review}}
+			</p>
+		</div>
+	</article>
+
+
+    {% endfor %}
+
+
+	</div> <!-- col.// -->
+</div> <!-- row.// -->
+
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

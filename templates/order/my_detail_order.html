@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% include "includes/header.html" %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+<div class="row">
+	<aside class="col-lg-9">
+<div class="card">
+<div class="card-body">
+	<h4 class="card-title mb-4">Review cart</h4>
+	<div class="row">
+        {% for product in product_order %}
+            <div class="col-md-6">
+                <figure class="itemside  mb-4">
+                    <div class="aside"><img src="{{ product.product.image.url}}" class="border img-sm"></div>
+                    <figcaption class="info">
+                        <a style="color: black" href="{% url 'product-detail' slug=product.product.slug %}">{{ product.product.name }}</a>
+                        <br>
+                        <span class="text-muted">Quantity : {{product.quantity}}</span>
+                        <br>
+                        {% if product.varation.all %}
+                            {% for item in product.varation.all  %}
+                                {{ item.variation_category | capfirst  }} : {{ item.variation_value | capfirst }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </figcaption>
+                </figure>
+            </div> <!-- col.// -->
+        {% endfor %}
+	</div> <!-- row.// -->
+</div> <!-- card-body.// -->
+
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-3">
+
+		<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+			  <dt>Total price:</dt>
+			  <dd class="text-right">$ {{ order.order_total }}</dd>
+			</dl>
+			<hr>
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+
+{% endblock %}
+
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% include "includes/footer.html" %}
+
+</body>
+</html>

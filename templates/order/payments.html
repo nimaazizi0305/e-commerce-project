@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% include "includes/header.html" %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+    <form action="{% url 'payments' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+	<aside class="col-lg-8">
+        <div class="card">
+          <div class="card-header">Billing Adress</div>
+          <div class="card-body">
+            <p class="card-text">Client : {{ order.fullname }}</p>
+            <p class="card-text">Address : {{ order.full_address }}</p>
+            <p class="card-text">Email : {{ order.email }}</p>
+            <p class="card-text">Phone Number : {{ order.phone_number }}</p>
+            {% if order.other_note %}
+                <b>Other Note : </b> {{ order.other_note }}
+            {% endif %}
+          </div>
+        </div> <!-- card.// -->
+        <br>
+        <br>
+
+        <div class="card">
+          <div class="card-header">Pyaments Method</div>
+          <div class="card-body">
+            <p class="card-text">PayPal</p>
+          </div>
+        </div> <!-- card.// -->
+        <br>
+        <br>
+        <div class="card">
+          <div class="card-header">Review Products</div>
+          <div class="card-body">
+            <div class="card-body">
+	<h4 class="card-title mb-4">Review cart</h4>
+	<div class="row">
+        {% for cart_item in cart_items %}
+            <div class="col-md-6">
+                <figure class="itemside  mb-4">
+                    <div class="aside"><img src="{{ cart_item.product.image.url }}" class="border img-sm"></div>
+                    <figcaption class="info">
+                        <a style="color: black" href="{% url 'product-detail' slug=cart_item.product.slug %}">{{ cart_item.product.name }}</a>
+                        <br>
+                        <span class="text-muted">Quantity : {{cart_item.quantity}}</span>
+                        <br>
+                        {% if cart_item.varation.all %}
+                            {% for item in cart_item.varation.all  %}
+                                {{ item.variation_category | capfirst  }} : {{ item.variation_value | capfirst }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </figcaption>
+                </figure>
+            </div> <!-- col.// -->
+        {% endfor %}
+	</div> <!-- row.// -->
+</div> <!-- card-body.// -->
+
+          </div>
+        </div> <!-- card.// -->
+	</aside> <!-- col.// -->
+	<aside class="col-lg-4">
+
+
+		<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+			  <dt>Total price:</dt>
+			  <dd class="text-right">$ {{ total }}</dd>
+			</dl>
+			<hr>
+			<p class="text-center mb-3">
+				<img src="{% static 'images/misc/payments.png' %}" height="26">
+			</p>
+			<button type="submit" href="{% url "checkout" %}" class="btn btn-primary btn-block"> Make Payments </button>
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+    </form>
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+
+{% endblock %}
+
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% include "includes/footer.html" %}
+
+</body>
+</html>
